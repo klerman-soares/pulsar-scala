@@ -16,7 +16,7 @@ class PulsarScalaAppTest extends AnyWordSpec with BeforeAndAfterEach with Matche
   var client: PulsarClient = _
   var producer: Producer[Issue] = _
   var consumer: Consumer[Issue] = _
-  val pulsarCLusterUrl = "pulsar://localhost:6650"
+  val pulsarClusterUrl = "pulsar://localhost:6650"
   val topic: Topic = Topic("persistent://sample/ns1/topic-name")
   val issue: Issue = Issue(1, "First issue", "Some description")
   val messageKey: Option[String] = Some("myKey")
@@ -29,45 +29,45 @@ class PulsarScalaAppTest extends AnyWordSpec with BeforeAndAfterEach with Matche
 
   "PulsarScalaApp" should {
     "create a PulsarClient" in {
-      client = PulsarScalaApp.createClient(pulsarCLusterUrl)
+      client = PulsarScalaApp.createClient(pulsarClusterUrl)
       client mustBe a[PulsarClient]
     }
 
     "create a PulsarClient using PulsarClientConfig" in {
-      client = PulsarScalaApp.createClientWithConfig(pulsarCLusterUrl)
+      client = PulsarScalaApp.createClientWithConfig(pulsarClusterUrl)
       client mustBe a[PulsarClient]
     }
 
     "create a producer for a given topic" in {
-      client = PulsarScalaApp.createClient(pulsarCLusterUrl)
+      client = PulsarScalaApp.createClient(pulsarClusterUrl)
       producer = PulsarScalaApp.createProducer(client, topic)
       producer mustBe a[Producer[_]]
       producer.topic mustBe topic
     }
 
     "send an Issue message" in {
-      client = PulsarScalaApp.createClient(pulsarCLusterUrl)
+      client = PulsarScalaApp.createClient(pulsarClusterUrl)
       producer = PulsarScalaApp.createProducer(client, topic)
       val messageId = PulsarScalaApp.sendMessage(producer, issue).get
       messageId mustBe a[MessageId]
     }
 
     "send an Issue message using a ProducerMessage" in {
-      client = PulsarScalaApp.createClient(pulsarCLusterUrl)
+      client = PulsarScalaApp.createClient(pulsarClusterUrl)
       producer = PulsarScalaApp.createProducer(client, topic)
       val messageId = PulsarScalaApp.sendMessageWithProducerMessage(producer, issue, messageKey).get
       messageId mustBe a[MessageId]
     }
 
     "create a consumer" in {
-      client = PulsarScalaApp.createClient(pulsarCLusterUrl)
+      client = PulsarScalaApp.createClient(pulsarClusterUrl)
       consumer = PulsarScalaApp.createConsumer(client, topic)
       consumer mustBe a[Consumer[_]]
       consumer.topic mustBe topic
     }
 
     "send and receive (blocking) a message" in {
-      client = PulsarScalaApp.createClient(pulsarCLusterUrl)
+      client = PulsarScalaApp.createClient(pulsarClusterUrl)
       consumer = PulsarScalaApp.createConsumer(client, topic)
       producer = PulsarScalaApp.createProducer(client, topic)
       val messageTry = PulsarScalaApp.sendAndReceive(consumer, producer, issue)
@@ -75,7 +75,7 @@ class PulsarScalaAppTest extends AnyWordSpec with BeforeAndAfterEach with Matche
     }
 
     "send and receive (async) a message" in {
-      client = PulsarScalaApp.createClient(pulsarCLusterUrl)
+      client = PulsarScalaApp.createClient(pulsarClusterUrl)
       consumer = PulsarScalaApp.createConsumer(client, topic)
       producer = PulsarScalaApp.createProducer(client, topic)
       val messageFuture = Await.ready(PulsarScalaApp.sendAndReceiveAsync(consumer, producer, issue), Duration.Inf)
