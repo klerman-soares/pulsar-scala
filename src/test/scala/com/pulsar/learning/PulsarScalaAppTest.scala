@@ -27,57 +27,45 @@ class PulsarScalaAppTest extends AnyWordSpec with BeforeAndAfterEach with Matche
     closeIfDefined(Option(consumer))
   }
 
-  "ProducerConsumer" should {
+  "PulsarScalaApp" should {
     "create a PulsarClient" in {
       client = PulsarScalaApp.createClient(pulsarCLusterUrl)
       client mustBe a[PulsarClient]
     }
-  }
 
-  "ProducerConsumer" should {
     "create a PulsarClient using PulsarClientConfig" in {
       client = PulsarScalaApp.createClientWithConfig(pulsarCLusterUrl)
       client mustBe a[PulsarClient]
     }
-  }
 
-  it should {
     "create a producer for a given topic" in {
       client = PulsarScalaApp.createClient(pulsarCLusterUrl)
       producer = PulsarScalaApp.createProducer(client, topic)
       producer mustBe a[Producer[_]]
       producer.topic mustBe topic
     }
-  }
 
-  it should {
     "send an Issue message" in {
       client = PulsarScalaApp.createClient(pulsarCLusterUrl)
       producer = PulsarScalaApp.createProducer(client, topic)
       val messageId = PulsarScalaApp.sendMessage(producer, issue).get
       messageId mustBe a[MessageId]
     }
-  }
 
-  it should {
     "send an Issue message using a ProducerMessage" in {
       client = PulsarScalaApp.createClient(pulsarCLusterUrl)
       producer = PulsarScalaApp.createProducer(client, topic)
       val messageId = PulsarScalaApp.sendMessageWithProducerMessage(producer, issue, messageKey).get
       messageId mustBe a[MessageId]
     }
-  }
 
-  it should {
     "create a consumer" in {
       client = PulsarScalaApp.createClient(pulsarCLusterUrl)
       consumer = PulsarScalaApp.createConsumer(client, topic)
       consumer mustBe a[Consumer[_]]
       consumer.topic mustBe topic
     }
-  }
 
-  it should {
     "send and receive (blocking) a message" in {
       client = PulsarScalaApp.createClient(pulsarCLusterUrl)
       consumer = PulsarScalaApp.createConsumer(client, topic)
@@ -85,9 +73,7 @@ class PulsarScalaAppTest extends AnyWordSpec with BeforeAndAfterEach with Matche
       val messageTry = PulsarScalaApp.sendAndReceive(consumer, producer, issue)
       messageTry.get.value mustBe issue
     }
-  }
 
-  it should {
     "send and receive (async) a message" in {
       client = PulsarScalaApp.createClient(pulsarCLusterUrl)
       consumer = PulsarScalaApp.createConsumer(client, topic)
